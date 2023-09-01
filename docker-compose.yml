@@ -1,0 +1,32 @@
+version: '3'
+
+x-general-settings: &generalsettings
+  platform: linux/amd64
+  restart: always
+  networks:
+    - kongnetwork
+
+services:
+  kong:
+    <<: *generalsettings
+    container_name: kong
+    build:
+      context: .
+      dockerfile: ./docker/build.Dockerfile
+    ports:
+      - 80:8000 # PROXY PORT
+      - 81:8001 # ADMIN PORT
+    ulimits:
+      nofile:
+        soft: 4096
+        hard: 4096 
+    volumes:
+      - ./data/kong.yml:/etc/kong/kong.yml
+      - ./data/kong.conf:/etc/kong/kong.conf
+  beebox:
+    <<: *generalsettings
+    container_name: beebox
+    image: 2d8ru/bwapp
+
+networks:
+  kongnetwork:

@@ -1,0 +1,16 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+- name: example_service
+  url: http://ifconfig.me
+
+routes:
+- name: example_route
+  service: example_service
+  paths:
+  - /
+
+plugins:
+- name: mre
+  service: example_service
